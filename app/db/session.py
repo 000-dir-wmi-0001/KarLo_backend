@@ -2,7 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 
-engine = create_engine(settings.DATABASE_URL)
+engine = create_engine(
+    settings.DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args={"sslmode": "require"}  # ✅ Required for Neon
+)
+
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 def get_db():
