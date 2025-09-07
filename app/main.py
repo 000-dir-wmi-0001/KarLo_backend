@@ -19,11 +19,13 @@ app = FastAPI(
 app.include_router(api_router)
 
 # Setup CORS
-origins = settings.CORS_ORIGINS.split(",") if isinstance(settings.CORS_ORIGINS, str) else settings.CORS_ORIGINS
+# origins = settings.CORS_ORIGINS.split(",") if isinstance(settings.CORS_ORIGINS, str) else settings.CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:3000","https://momin-mohasin.vercel.app"
+        ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
