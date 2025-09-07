@@ -63,6 +63,10 @@ MAIL_SUPPRESS_SEND=false
 ## Run
 ```cmd
 uvicorn app.main:app --reload
+
+## Deployment Run
+```cmd
+web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 - App: http://127.0.0.1:8000/
