@@ -12,14 +12,13 @@ class ContributeCreate(BaseModel):
     zip_code: str
     email: EmailStr
 
-
 class ContributeResponse(BaseModel):
+    id: int
     first_name: str
     last_name: str
     email: EmailStr
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class ContributeUpdate(BaseModel):
     first_name: Optional[str] = None
@@ -34,16 +33,18 @@ class ContributeUpdate(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class ContributeListResponse(BaseModel):
     contributions: list[ContributeResponse]
     total: int
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class ContributeDeleteResponse(BaseModel):
     success: bool
     message: str
 
     model_config = ConfigDict(from_attributes=True)
+
+class CreateContributeResponse(BaseModel):
+    data: ContributeResponse
+    message: str

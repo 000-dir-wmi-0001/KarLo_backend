@@ -7,7 +7,7 @@ def create_contribution(data: contribute_schema.ContributeCreate, db: Session):
     return contribute_repository.create_contribute(db, data)
 
 
-def update_contribution(id: int, data: contribute_schema.ContributeCreate, db: Session):
+def update_contribution(id: int, data: contribute_schema.ContributeUpdate, db: Session):
     return contribute_repository.update_contribute(db, id, data)
 
 
