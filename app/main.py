@@ -10,8 +10,8 @@ from app.core.config import settings
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Contribute API",
-    description="FastAPI backend for contributor data.",
+    title="KarLo API",
+    description="FastAPI backend for KarLo data.",
     version="1.0.0"
 )
 

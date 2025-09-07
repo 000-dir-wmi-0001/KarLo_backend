@@ -13,7 +13,7 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         self.model = model
 
     def create(self, db: Session, obj_in: SchemaType) -> ModelType:
-        obj_data = obj_in.dict()
+        obj_data = obj_in.model_dump() if hasattr(obj_in, "model_dump") else obj_in.dict()
         db_obj = self.model(**obj_data)
         db.add(db_obj)
         db.commit()
@@ -28,7 +28,10 @@ class CRUDBase(Generic[ModelType, SchemaType]):
 
     def update(self, db: Session, db_obj: ModelType, obj_in: SchemaType | dict[str, Any]) -> ModelType:
         # Accept both Pydantic model and plain dict
-        update_data = obj_in.dict(exclude_unset=True) if isinstance(obj_in, BaseModel) else obj_in
+        if isinstance(obj_in, BaseModel):
+            update_data = obj_in.model_dump(exclude_unset=True) if hasattr(obj_in, "model_dump") else obj_in.dict(exclude_unset=True)
+        else:
+            update_data = obj_in
         for field, value in update_data.items():
             if hasattr(db_obj, field):
                 setattr(db_obj, field, value)
@@ -36,10 +39,14 @@ class CRUDBase(Generic[ModelType, SchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def delete(self, db: Session, id: int) -> bool:
-        obj = self.get_by_id(db, id)
-        if not obj:
-            return False
+    def delete(self, db: Session, obj_or_id) -> bool:
+        # Accept either a model instance or an ID
+        if isinstance(obj_or_id, self.model):
+            obj = obj_or_id
+        else:
+            obj = self.get_by_id(db, obj_or_id)
+            if not obj:
+                return False
         db.delete(obj)
         db.commit()
         return True
