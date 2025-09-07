@@ -18,17 +18,21 @@ async def create_contact(
     db: Session = Depends(get_db)
 ):
     new_contact = contact_service.create_contact(contact, db)
-    mail_data = {
-    "type": "contact",
-    "recipients": [settings.EMAIL_ADMIN],
-    "context": {
-        "name": contact.name,
-        "email": contact.email,
-        "message": contact.message,
-        "subject": contact.subject
-    }
-}
-    await dispatch(mail_data)
+    # Send notification email (non-blocking failures are okay)
+    try:
+        await dispatch(
+            "contact",
+            [settings.EMAIL_ADMIN],
+            {
+                "name": contact.name,
+                "email": contact.email,
+                "message": contact.message,
+                "subject": contact.subject,
+            },
+        )
+    except Exception:
+        # Silently ignore email errors to not block API success
+        pass
     return {
         "data": new_contact,
         "message": "Contact created successfully"
