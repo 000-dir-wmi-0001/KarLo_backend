@@ -6,8 +6,11 @@ from app.api.api import api_router
 from app.core.config import settings
 
 
-# Create tables if not using Alembic (dev only)
-Base.metadata.create_all(bind=engine)
+# Create tables only in dev or when using SQLite (avoid on remote DBs)
+from urllib.parse import urlparse
+is_sqlite = urlparse(settings.DATABASE_URL or "sqlite:///./karlo.db").scheme.startswith("sqlite")
+if settings.DEBUG or is_sqlite:
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="KarLo API",
@@ -18,8 +21,6 @@ app = FastAPI(
 # Register API routes
 app.include_router(api_router)
 
-# Setup CORS
-# origins = settings.CORS_ORIGINS.split(",") if isinstance(settings.CORS_ORIGINS, str) else settings.CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
