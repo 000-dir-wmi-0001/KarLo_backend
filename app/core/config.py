@@ -32,6 +32,7 @@ class Settings:
     MAIL_VALIDATE_CERTS: bool = os.getenv("MAIL_VALIDATE_CERTS", "true").lower() == "true"
     MAIL_SUPPRESS_SEND: bool = os.getenv("MAIL_SUPPRESS_SEND", "false").lower() == "true"
     MAIL_TEMPLATE_FOLDER: str | None = os.getenv("MAIL_TEMPLATE_FOLDER")
+    EMAIL_ADMIN: str = os.getenv("EMAIL_ADMIN", "admin@example.com")
 
 
 settings = Settings()

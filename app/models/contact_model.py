@@ -5,6 +5,7 @@ class Contact(Base):
   __tablename__ = 'contact'
 
   id = Column(Integer, primary_key=True, index=True)
+  name = Column(String, index=True)
   email= Column(String, index=True)
   subject = Column(String, index=True)
   message = Column(String, index=True)

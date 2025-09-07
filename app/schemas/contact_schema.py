@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 
 class ContactCreate(BaseModel):
+    name: str
     email: EmailStr
     subject: str
     message: str
@@ -9,6 +10,7 @@ class ContactCreate(BaseModel):
 
 class ContactResponse(BaseModel):
     id: int
+    name: str
     email: EmailStr
     subject: str
     message: str
@@ -17,6 +19,7 @@ class ContactResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 class ContactUpdate(BaseModel):
+    name: Optional[str] = None
     email: Optional[EmailStr] = None
     subject: Optional[str] = None
     message: Optional[str] = None

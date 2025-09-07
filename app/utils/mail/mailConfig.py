@@ -1,6 +1,17 @@
 from fastapi_mail import ConnectionConfig
 from app.core.config import settings
+from pathlib import Path
 import os
+
+# Resolve the template folder path and ensure it exists to satisfy ConnectionConfig validation
+default_templates_dir = Path(__file__).parent / "templates"
+templates_dir = (
+    Path(settings.MAIL_TEMPLATE_FOLDER).resolve()
+    if settings.MAIL_TEMPLATE_FOLDER
+    else default_templates_dir.resolve()
+)
+# Create directory if missing (no-op if it already exists)
+templates_dir.mkdir(parents=True, exist_ok=True)
 
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.MAIL_USERNAME,
@@ -14,5 +25,5 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=settings.MAIL_USE_CREDENTIALS,
     VALIDATE_CERTS=settings.MAIL_VALIDATE_CERTS,
     SUPPRESS_SEND=settings.MAIL_SUPPRESS_SEND,
-    TEMPLATE_FOLDER=settings.MAIL_TEMPLATE_FOLDER or os.path.join("app", "utils", "mail", "templates"),
+    TEMPLATE_FOLDER=str(templates_dir),
 )

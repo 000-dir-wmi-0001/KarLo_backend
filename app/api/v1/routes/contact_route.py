@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.schemas import contact_schema
 from app.services.contact import contact_service
 from app.db.session import get_db
+from app.utils.mail.dispatchEmail import dispatch
+from app.core.config import settings
 
 contact_router = APIRouter(prefix="/contact", tags=["Contact"])
 
@@ -11,11 +13,22 @@ contact_router = APIRouter(prefix="/contact", tags=["Contact"])
     response_model=contact_schema.CreateContactResponse,
     status_code=status.HTTP_201_CREATED
 )
-def create_contact(
+async def create_contact(
     contact: contact_schema.ContactCreate,
     db: Session = Depends(get_db)
 ):
     new_contact = contact_service.create_contact(contact, db)
+    mail_data = {
+    "type": "contact",
+    "recipients": [settings.EMAIL_ADMIN],
+    "context": {
+        "name": contact.name,
+        "email": contact.email,
+        "message": contact.message,
+        "subject": contact.subject
+    }
+}
+    await dispatch(mail_data)
     return {
         "data": new_contact,
         "message": "Contact created successfully"
