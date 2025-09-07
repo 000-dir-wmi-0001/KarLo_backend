@@ -13,13 +13,11 @@ class Settings:
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-    # Convert comma-separated string to list
-    CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "").split(",")
+
+    # Mail settings (enhanced)
     EMAIL: str = os.getenv("EMAIL")
     EMAIL_PASSWORD: str = os.getenv("EMAIL_PASSWORD")
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
-
-    # Mail settings (enhanced)
     MAIL_USERNAME: str | None = os.getenv("MAIL_USERNAME") or os.getenv("EMAIL")
     MAIL_PASSWORD: str | None = os.getenv("MAIL_PASSWORD") or os.getenv("EMAIL_PASSWORD")
     MAIL_FROM: str | None = os.getenv("MAIL_FROM") or os.getenv("EMAIL")
