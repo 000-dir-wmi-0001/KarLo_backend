@@ -4,7 +4,7 @@ from app.schemas import contribute_schema
 from app.services.contribute import contribute_service
 from app.db.session import get_db
 
-contribute_router = APIRouter(prefix="/v1/contribute", tags=["Contribute"])
+contribute_router = APIRouter(prefix="/contribute", tags=["Contribute"])
 
 @contribute_router.post(
     "/create",

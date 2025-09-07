@@ -13,6 +13,7 @@ class ContributeCreate(BaseModel):
     email: EmailStr
 
 class ContributeResponse(BaseModel):
+    id: int
     first_name: str
     last_name: str
     email: EmailStr

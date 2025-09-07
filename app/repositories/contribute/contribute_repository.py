@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.contribute_model import Contribute
-from app.schemas.contribute_schema import ContributeCreate
+from app.schemas.contribute_schema import ContributeCreate, ContributeUpdate
 from app.repositories.crud import CRUDBase
 
 crud_contribute = CRUDBase(Contribute)
@@ -8,7 +8,7 @@ crud_contribute = CRUDBase(Contribute)
 def create_contribute(db: Session, data: ContributeCreate):
     return crud_contribute.create(db, data)
 
-def update_contribute(db: Session, id: int, data: ContributeCreate):
+def update_contribute(db: Session, id: int, data: ContributeUpdate):
     db_obj = crud_contribute.get_by_id(db, id)
     if not db_obj:
         return None
