@@ -12,8 +12,12 @@ class CRUDBase(Generic[ModelType, SchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
-    def create(self, db: Session, obj_in: SchemaType) -> ModelType:
-        obj_data = obj_in.model_dump() if hasattr(obj_in, "model_dump") else obj_in.dict()
+    def create(self, db: Session, obj_in: SchemaType | dict[str, Any]) -> ModelType:
+        # Accept both Pydantic model and plain dict
+        if isinstance(obj_in, BaseModel):
+            obj_data = obj_in.model_dump() if hasattr(obj_in, "model_dump") else obj_in.dict()
+        else:
+            obj_data = obj_in
         db_obj = self.model(**obj_data)
         db.add(db_obj)
         db.commit()
