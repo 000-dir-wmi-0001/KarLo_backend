@@ -25,7 +25,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000","https://momin-mohasin.vercel.app"
+        "http://localhost:3000","https://momin-mohasin.vercel.app", "https://kar-lo.vercel.app", "http://localhost:3001"
         ],
     allow_credentials=True,
     allow_methods=["*"],
