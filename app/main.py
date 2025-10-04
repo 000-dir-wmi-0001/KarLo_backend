@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from app.db.base import Base
 from app.db.session import engine
-from app.api.api import api_router
+from app.karlo_c.api.api import api_router
 from app.core.config import settings
 from app.middleware.jwt_middleware import JWTMiddleware
 from fastapi.routing import APIRoute
 from contextlib import asynccontextmanager
+from .home_cure.api.home_cure_route import api_home_cure_router
 
 public_paths = [
     # Public API endpoints (include full routed path with /api prefix)
@@ -76,6 +77,7 @@ app.add_middleware(
 
 # Register API routes
 app.include_router(api_router)
+app.include_router(api_home_cure_router)
 
 # Root route
 @app.get("/")
