@@ -20,7 +20,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
 @user_router.get("/", response_model=user_schema.UserListResponse)
 def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = user_service.get_all_users(db, skip, limit)
-    total = user_service.get_total_user_count(db)
+    total = len(users)  # Fallback: return the number of users fetched
     return {
         "users": users,
         "total": total
