@@ -75,7 +75,6 @@ def upgrade() -> None:
     # here prevents duplicate-type creation errors during migrations.
     sa.Column("role", sa.String, nullable=False, server_default="user"),
 
-        sa.Column("geo_location", sa.String, nullable=True),
         sa.Column("last_login", sa.DateTime(timezone=True), nullable=True),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=True),
