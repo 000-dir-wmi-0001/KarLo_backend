@@ -29,6 +29,3 @@ def get_service(id: int, db: Session = Depends(get_db)):
 def get_all_services(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     services = service_service.get_all_services(db, skip, limit)
     return {"services": services, "total": len(services)}
-from fastapi import APIRouter, Depends, HTTPException, status, Request
-
-services_router = APIRouter(prefix="/services", tags=["Services"])
