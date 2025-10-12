@@ -32,7 +32,7 @@ class AdminLog(Base):
     created_at = Column(String, default=lambda: datetime.utcnow().isoformat())
     
     # Relationships
-    admin_user = relationship("User", foreign_keys=[admin_user_id])
+    admin_user = relationship("app.home_cure.models.user_model.User", foreign_keys=[admin_user_id])
 
     def __repr__(self):
         return f"<AdminLog(id={self.id}, action={self.action}, entity_type={self.entity_type}, admin_user_id={self.admin_user_id})>"

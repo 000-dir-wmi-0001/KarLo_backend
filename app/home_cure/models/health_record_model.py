@@ -42,7 +42,7 @@ class HealthRecord(Base):
     updated_at = Column(String, default=lambda: datetime.utcnow().isoformat(), onupdate=lambda: datetime.utcnow().isoformat())
     
     # Relationships
-    user = relationship("User", back_populates="health_records", foreign_keys=[user_id])
+    user = relationship("app.home_cure.models.user_model.User", back_populates="health_records", foreign_keys=[user_id])
     booking = relationship("Booking", foreign_keys=[booking_id])
 
     def __repr__(self):

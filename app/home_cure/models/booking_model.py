@@ -62,7 +62,7 @@ class Booking(Base):
     cancelled_at = Column(String, nullable=True)
     
     # Relationships
-    user = relationship("User", back_populates="bookings", foreign_keys=[user_id])
+    user = relationship("app.home_cure.models.user_model.User", back_populates="bookings", foreign_keys=[user_id])
     technician = relationship("Technician", back_populates="bookings", foreign_keys=[technician_id])
     service = relationship("Service", back_populates="bookings", foreign_keys=[service_id])
 
