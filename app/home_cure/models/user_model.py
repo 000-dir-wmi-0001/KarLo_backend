@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Enum as SAEnum
+from sqlalchemy.orm import relationship
 from app.db.base import Base
 import enum
 
@@ -54,6 +55,12 @@ class User(Base):
     deleted_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), default=_now_utc)
     updated_at = Column(DateTime(timezone=True), default=_now_utc, onupdate=_now_utc)
+
+    # Relationships
+    technician = relationship("Technician", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    bookings = relationship("Booking", back_populates="user", foreign_keys="[Booking.user_id]", cascade="all, delete-orphan")
+    health_records = relationship("HealthRecord", back_populates="user", cascade="all, delete-orphan")
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}', role='{self.role}')>"
