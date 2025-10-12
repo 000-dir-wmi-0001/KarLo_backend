@@ -37,6 +37,7 @@ class Settings:
     MAIL_SUPPRESS_SEND: bool = os.getenv("MAIL_SUPPRESS_SEND", "false").lower() == "true"
     MAIL_TEMPLATE_FOLDER: str | None = os.getenv("MAIL_TEMPLATE_FOLDER")
     EMAIL_ADMIN: str = os.getenv("EMAIL_ADMIN", "admin@example.com")
+    ORIGIN_URL: str = os.getenv("ORIGIN_URL")
 
     # Environment
     ENV: str = os.getenv("ENV", "development")
