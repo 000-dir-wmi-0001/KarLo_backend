@@ -116,3 +116,4 @@ alembic upgrade head
 - SMTP (Gmail): use an App Password (requires 2FA). For SSL use port 465 with `MAIL_SSL_TLS=true` and `MAIL_STARTTLS=false`.
 - CORS: add your frontend URL to `CORS_ORIGINS` (comma-separated).
 - DB: verify `DATABASE_URL`; for SQLite ensure the folder is writable.
+=======
