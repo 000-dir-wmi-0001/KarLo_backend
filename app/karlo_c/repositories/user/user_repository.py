@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.karlo_c.models.user_model import User
+from app.karlo_c.models.user_model import KarloUser as User
 from app.karlo_c.schemas.user_schema import UserCreate, UserUpdate, UserResponse, UserListResponse
 from app.karlo_c.repositories.crud import CRUDBase
 from app.utils.security import hash_password

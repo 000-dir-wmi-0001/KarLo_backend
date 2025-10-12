@@ -20,6 +20,10 @@ class JWTMiddleware(BaseHTTPMiddleware):
         if path in self.public_paths:
             return await call_next(request)
 
+        # Allow CORS preflight requests to pass through without auth checks
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         # Check if path matches any protected prefix
         is_protected = any(path.startswith(prefix) for prefix in self.protected_prefixes)
         

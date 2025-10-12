@@ -8,7 +8,7 @@ def _now_utc():
     return datetime.now(timezone.utc)
 
 
-class User(Base):
+class KarloUser(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
