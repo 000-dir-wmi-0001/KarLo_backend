@@ -3,11 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from app.db.base import Base
 from app.db.session import engine
-from app.api.api import api_router
+from app.karlo_c.api.api import api_router
 from app.core.config import settings
 from app.middleware.jwt_middleware import JWTMiddleware
 from fastapi.routing import APIRoute
 from contextlib import asynccontextmanager
+from app.home_cure import home_cure_app
+from app.home_cure.core.config import HOME_CURE_PUBLIC_PATHS
 
 public_paths = [
     # Public API endpoints (include full routed path with /api prefix)
@@ -21,14 +23,15 @@ public_paths = [
     "/docs",
     "/redoc",
     "/openapi.json",
-]
+] + HOME_CURE_PUBLIC_PATHS  # Add home_cure public paths
 
 
 # Create tables only in dev or when using SQLite (avoid on remote DBs)
-from urllib.parse import urlparse
-is_sqlite = urlparse(settings.DATABASE_URL or "sqlite:///./karlo.db").scheme.startswith("sqlite")
-if settings.DEBUG or is_sqlite:
-    Base.metadata.create_all(bind=engine)
+# Disabled: Using Alembic for database migrations instead
+# from urllib.parse import urlparse
+# is_sqlite = urlparse(settings.DATABASE_URL or "sqlite:///./karlo.db").scheme.startswith("sqlite")
+# if settings.DEBUG or is_sqlite:
+#     Base.metadata.create_all(bind=engine)
 
 
 # Lifespan handler replaces deprecated on_event hooks
@@ -68,14 +71,18 @@ app.add_middleware(
 )
 app.add_middleware(
     JWTMiddleware,
-    # Protect all versioned API routes (v1, v2, ...) under the /api prefix
+    # Protect all versioned API routes (v1, v2, ...) under the /api prefix and /home_cure
     protected_prefix="/api/v",
+    protected_prefixes=["/api/v", "/home_cure"],
     public_paths=public_paths
 )
 
 
 # Register API routes
 app.include_router(api_router)
+
+# Mount the Home Cure app as a sub-application
+app.mount("/home_cure", home_cure_app)
 
 # Root route
 @app.get("/")
