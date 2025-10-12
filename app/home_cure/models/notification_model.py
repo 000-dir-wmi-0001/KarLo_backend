@@ -37,7 +37,7 @@ class Notification(Base):
     created_at = Column(String, default=lambda: datetime.utcnow().isoformat())
     
     # Relationships
-    user = relationship("User", back_populates="notifications", foreign_keys=[user_id])
+    user = relationship("app.home_cure.models.user_model.User", back_populates="notifications", foreign_keys=[user_id])
 
     def __repr__(self):
         return f"<Notification(id={self.id}, user_id={self.user_id}, title={self.title}, is_read={self.is_read})>"
