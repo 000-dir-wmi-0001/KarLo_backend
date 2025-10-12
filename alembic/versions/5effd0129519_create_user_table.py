@@ -67,13 +67,12 @@ def upgrade() -> None:
         sa.Column("city", sa.String, index=True, nullable=True),
         sa.Column("zip_code", sa.String, index=True, nullable=True),
         sa.Column("address", sa.String, index=True, nullable=True),
-        sa.Column("geo_location", sa.String, index=True, nullable=True),
 
-    # Use STRING in migration to avoid creating Postgres enum during table DDL.
-    # The application model can still map to an Enum at runtime; using string
-    # here prevents duplicate-type creation errors during migrations.
-    sa.Column("role", sa.String, nullable=False, server_default="user"),
-
+        # Use STRING in migration to avoid creating Postgres enum during table DDL.
+        # The application model can still map to an Enum at runtime; using string
+        # here prevents duplicate-type creation errors during migrations.
+        sa.Column("role", sa.String, nullable=False, server_default="user"),
+        
         sa.Column("geo_location", sa.String, nullable=True),
         sa.Column("last_login", sa.DateTime(timezone=True), nullable=True),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
