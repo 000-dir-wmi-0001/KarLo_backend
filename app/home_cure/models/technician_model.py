@@ -43,7 +43,7 @@ class Technician(Base):
     updated_at = Column(String, default=lambda: datetime.utcnow().isoformat(), onupdate=lambda: datetime.utcnow().isoformat())
     
     # Relationships
-    user = relationship("User", back_populates="technician", foreign_keys=[user_id])
+    user = relationship("app.home_cure.models.user_model.User", back_populates="technician", foreign_keys=[user_id])
     bookings = relationship("Booking", back_populates="technician", foreign_keys="[Booking.technician_id]")
     earnings = relationship("TechnicianEarnings", back_populates="technician", cascade="all, delete-orphan")
 
