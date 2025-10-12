@@ -59,12 +59,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://momin-mohasin.vercel.app",
-        "https://kar-lo.vercel.app",
-        "http://localhost:3001"
-    ],
+    # allow_origins=[
+    #     "http://localhost:3000",
+    #     "https://momin-mohasin.vercel.app",
+    #     "https://kar-lo.vercel.app",
+    #     "http://localhost:3001",
+    # ],
+    CORSMiddleware=["*"],  # Allow all origins (change in production)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
