@@ -65,7 +65,7 @@ app.add_middleware(
     #     "https://kar-lo.vercel.app",
     #     "http://localhost:3001",
     # ],
-    CORSMiddleware=["*"],  # Allow all origins (change in production)
+    allow_origins=["*"],  # Allow all origins (change in production)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
