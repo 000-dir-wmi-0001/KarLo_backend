@@ -47,6 +47,3 @@ def delete_service(id: int, db: Session = Depends(get_db)):
     if not result:
         raise HTTPException(status_code=404, detail="Service not found")
     return {"success": True, "message": f"Service with ID {id} deleted successfully"}
-from fastapi import APIRouter, Depends, HTTPException, status, Request
-
-service_router = APIRouter(prefix="/service", tags=["Services"])
