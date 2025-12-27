@@ -64,6 +64,7 @@ app.add_middleware(
         "http://localhost:3000",
         "https://momin-mohasin.vercel.app",
         "https://kar-lo.vercel.app",
+        "https://www.momin-mohasin.me",
         "http://localhost:3001",
         "https://home-cure-frontend.vercel.app",
     ],
