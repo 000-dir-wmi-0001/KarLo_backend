@@ -5,9 +5,10 @@ Base = declarative_base()
 # Import models so they're registered with Base.metadata before create_all
 # Do not remove these imports even if unused
 try:
-	from app.models.contact_model import Contact  # noqa: F401
-	from app.models.contribute_model import Contribute  # noqa: F401
-	from app.models.user_model import User  # noqa: F401
+	from app.karlo_c.models.contact_model import Contact  # noqa: F401
+	from app.karlo_c.models.contribute_model import Contribute  # noqa: F401
+	from app.karlo_c.models.user_model import KarloUser  # noqa: F401
+	from app.karlo_c.models.task_model import Task  # noqa: F401
 	
 	# Home Cure models
 	from app.home_cure.models.user_model import User as HomeCureUser  # noqa: F401

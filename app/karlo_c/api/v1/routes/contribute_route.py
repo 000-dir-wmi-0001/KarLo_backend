@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from app.karlo_c.schemas import contribute_schema
 from app.karlo_c.services.contribute import contribute_service
 from app.db.session import get_db
+from app.karlo_c.api.v1.authz import require_superuser
 
 contribute_router = APIRouter(prefix="/contribute", tags=["Contribute"])
 
@@ -22,14 +23,16 @@ def create_contribute(
     }
 
 @contribute_router.get("/{id}", response_model=contribute_schema.ContributeResponse)
-def get_contribute(id: int, db: Session = Depends(get_db)):
+def get_contribute(id: int, request: Request, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     result = contribute_service.get_contribution_by_id(id, db)
     if not result:
         raise HTTPException(status_code=404, detail="Contribution not found")
     return result
 
 @contribute_router.get("/", response_model=contribute_schema.ContributeListResponse)
-def get_all_contributes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_all_contributes(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     contributions = contribute_service.get_all_contributions(db, skip, limit)
     return {
         "contributions": contributions,
@@ -40,15 +43,18 @@ def get_all_contributes(skip: int = 0, limit: int = 100, db: Session = Depends(g
 def update_contribute(
     id: int,
     contribute: contribute_schema.ContributeUpdate,
+    request: Request,
     db: Session = Depends(get_db)
 ):
+    require_superuser(request, db)
     result = contribute_service.update_contribution(id, contribute, db)
     if not result:
         raise HTTPException(status_code=404, detail="Contribution not found")
     return result
 
 @contribute_router.delete("/delete/{id}", response_model=contribute_schema.ContributeDeleteResponse)
-def delete_contribute(id: int, db: Session = Depends(get_db)):
+def delete_contribute(id: int, request: Request, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     result = contribute_service.delete_contribution(id, db)
     if not result:
         raise HTTPException(status_code=404, detail="Contribution not found")
@@ -58,14 +64,16 @@ def delete_contribute(id: int, db: Session = Depends(get_db)):
     }
 
 @contribute_router.get("/email/{email}", response_model=contribute_schema.ContributeResponse)
-def get_contribution_by_email(email: str, db: Session = Depends(get_db)):
+def get_contribution_by_email(email: str, request: Request, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     result = contribute_service.get_contribution_by_email(email, db)
     if not result:
         raise HTTPException(status_code=404, detail="Contribution not found")
     return result
 
 @contribute_router.get("/country/{country}", response_model=list[contribute_schema.ContributeResponse])
-def get_contributions_by_country(country: str, db: Session = Depends(get_db)):
+def get_contributions_by_country(country: str, request: Request, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     result = contribute_service.get_contributions_by_country(country, db)
     if not result:
         raise HTTPException(status_code=404, detail="No contributions found for this country")

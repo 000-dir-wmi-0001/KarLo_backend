@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from app.karlo_c.schemas import user_schema
 from app.karlo_c.services.user import user_service
 from app.db.session import get_db
+from app.karlo_c.api.v1.authz import require_self_or_superuser, require_superuser
 
 user_router = APIRouter(prefix="/user", tags=["User"])
 
@@ -12,13 +13,15 @@ def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     return user_service.create_user(user, db)
   
 @user_router.get("/{id}", response_model=user_schema.UserResponse)
-def get_user(id: int, db: Session = Depends(get_db)):
+def get_user(id: int, request: Request, db: Session = Depends(get_db)):
+    require_self_or_superuser(id, request, db)
     result = user_service.get_user_by_id(id, db)
     if not result:
         raise HTTPException(status_code=404, detail="User not found")
     return result
 @user_router.get("/", response_model=user_schema.UserListResponse)
-def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_all_users(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    require_superuser(request, db)
     users = user_service.get_all_users(db, skip, limit)
     total = len(users)  # Fallback: return the number of users fetched
     return {
@@ -29,14 +32,17 @@ def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 def update_user(
     id: int,
     user: user_schema.UserUpdate,
+    request: Request,
     db: Session = Depends(get_db)
 ):
+    require_self_or_superuser(id, request, db)
     result = user_service.update_user(id, user, db)
     if not result:
         raise HTTPException(status_code=404, detail="User not found")
     return result 
 @user_router.delete("/delete/{id}", response_model=user_schema.UserDeleteResponse)
-def delete_user(id: int, db: Session = Depends(get_db)):
+def delete_user(id: int, request: Request, db: Session = Depends(get_db)):
+    require_self_or_superuser(id, request, db)
     result = user_service.delete_user(id, db)
     if not result:
         raise HTTPException(status_code=404, detail="User not found")
