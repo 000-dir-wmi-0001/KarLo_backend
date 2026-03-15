@@ -8,5 +8,183 @@
         "lon": 73.8567
       }
     ]
+  },
+  "search::vijay sales": {
+    "timestamp": 1773583295.0851448,
+    "results": [
+      {
+        "display_name": "Vijay Sales, Pune, Pune City, Pune, Maharashtra, 411001, India",
+        "lat": 18.5040367,
+        "lon": 73.925101
+      },
+      {
+        "display_name": "Vijay Sales, Swami Vivekanand Road, Rizvi Nagar, Vile Parle West, H/W Ward, Mumbai Zone 3, Mumbai, Mumbai Suburban District, Maharashtra, 400054, India",
+        "lat": 19.0849014,
+        "lon": 72.837884
+      },
+      {
+        "display_name": "Vijay Sales, Linking Road, Linking Road Shopping area, Khar, Bandra West, Mumbai Zone 3, Mumbai, Mumbai Suburban District, Maharashtra, 400050, India",
+        "lat": 19.0663137,
+        "lon": 72.8338707
+      },
+      {
+        "display_name": "Vijay Sales, Satara Road, Panchavati, Sahakar Nagar, Pune City, Pune, Maharashtra, 411051, India",
+        "lat": 18.4795029,
+        "lon": 73.8566635
+      },
+      {
+        "display_name": "Vijay Sales, Solapur Road, Fatima Nagar, Pune City, Pune, Maharashtra, 411013, India",
+        "lat": 18.506688,
+        "lon": 73.9082373
+      }
+    ]
+  },
+  "search::guasi masjid kala khadak": {
+    "timestamp": 1773583520.5500941,
+    "results": []
+  },
+  "search::kala khadak": {
+    "timestamp": 1773583534.3125217,
+    "results": []
+  },
+  "search::kala khadak, pune": {
+    "timestamp": 1773583539.5510786,
+    "results": []
+  },
+  "search::kala khadak, baner": {
+    "timestamp": 1773583544.7286348,
+    "results": []
+  },
+  "search::kala khadak, tathawade, pimpri-chinchwad, maharashtra 411033": {
+    "timestamp": 1773583605.696105,
+    "results": []
+  },
+  "search::kala khadak, tathawade,": {
+    "timestamp": 1773583621.299858,
+    "results": []
+  },
+  "search::swargate": {
+    "timestamp": 1773583895.7338474,
+    "results": [
+      {
+        "display_name": "Swargate, Satara Road, Swargate, Pune City, Pune, Maharashtra, 411009, India",
+        "lat": 18.4986771,
+        "lon": 73.8578427
+      },
+      {
+        "display_name": "Swargate, Swargate PMPML Bus Stop Road, Swargate, Pune, Pune City, Pune, Maharashtra, 411001, India",
+        "lat": 18.4994549,
+        "lon": 73.8580866
+      },
+      {
+        "display_name": "Sarasbaug, swargate, Chimaji Appa Peshwe Path, Swargate, Pune City, Pune, Maharashtra, 411009, India",
+        "lat": 18.5004949,
+        "lon": 73.8529037
+      },
+      {
+        "display_name": "Swargate \u0938\u094d\u0935\u093e\u0930\u0917\u0947\u091f, Swargate PMPML Bus Stop Road, Swargate, Pune, Pune City, Pune, Maharashtra, 411001, India",
+        "lat": 18.4997453,
+        "lon": 73.8574604
+      },
+      {
+        "display_name": "Swargate, Pune, Pune City, Pune, Maharashtra, 411001, India",
+        "lat": 18.5006768,
+        "lon": 73.8586255
+      }
+    ]
+  },
+  "search::kala khadak, pimpri chinchwad": {
+    "timestamp": 1773583921.3882604,
+    "results": []
+  },
+  "search::baner": {
+    "timestamp": 1773583940.7772703,
+    "results": [
+      {
+        "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+        "lat": 18.5642431,
+        "lon": 73.7768573
+      },
+      {
+        "display_name": "Baner, Jayapatna, Kalahandi, Odisha, 766018, India",
+        "lat": 19.5322824,
+        "lon": 82.8086975
+      },
+      {
+        "display_name": "Baner, Shimla ( Rural ), Shimla, Himachal Pradesh, 171003, India",
+        "lat": 31.1505047,
+        "lon": 77.1516073
+      },
+      {
+        "display_name": "Bagn\u00e8res-de-Bigorre, Hautes-Pyr\u00e9n\u00e9es, Occitanie, France m\u00e9tropolitaine, France",
+        "lat": 43.0658212,
+        "lon": 0.1530914
+      },
+      {
+        "display_name": "Argel\u00e8s-Bagn\u00e8res, Bagn\u00e8res-de-Bigorre, Hautes-Pyr\u00e9n\u00e9es, Occitanie, France m\u00e9tropolitaine, 65200, France",
+        "lat": 43.0892755,
+        "lon": 0.1965086
+      }
+    ]
+  },
+  "reverse::18.53234:73.84299": {
+    "timestamp": 1773584061.9648228,
+    "results": [
+      {
+        "display_name": "Deccan Wheels, Ganeshkhind Road, Model Colony, Pune, Pune City, Pune, Maharashtra, 411016, India",
+        "lat": 18.532338123414785,
+        "lon": 73.84299424318817
+      }
+    ]
+  },
+  "reverse::18.53246:73.84290": {
+    "timestamp": 1773584063.2555602,
+    "results": [
+      {
+        "display_name": "Deccan Wheels, Ganeshkhind Road, Model Colony, Pune, Pune City, Pune, Maharashtra, 411016, India",
+        "lat": 18.532456124273644,
+        "lon": 73.8428991822662
+      }
+    ]
+  },
+  "reverse::18.53237:73.84296": {
+    "timestamp": 1773584065.0350645,
+    "results": [
+      {
+        "display_name": "Deccan Wheels, Ganeshkhind Road, Model Colony, Pune, Pune City, Pune, Maharashtra, 411016, India",
+        "lat": 18.532365589171324,
+        "lon": 73.84295812999694
+      }
+    ]
+  },
+  "reverse::18.46374:73.88838": {
+    "timestamp": 1773584072.0731292,
+    "results": [
+      {
+        "display_name": "Kondhwa Budruk, Pune City, Pune, Maharashtra, 411048, India",
+        "lat": 18.463740060381372,
+        "lon": 73.88837853430444
+      }
+    ]
+  },
+  "reverse::18.46358:73.88841": {
+    "timestamp": 1773584105.0484247,
+    "results": [
+      {
+        "display_name": "Kondhwa Budruk, Pune City, Pune, Maharashtra, 411048, India",
+        "lat": 18.463577954843945,
+        "lon": 73.88841119956172
+      }
+    ]
+  },
+  "reverse::18.51785:73.83457": {
+    "timestamp": 1773585223.106912,
+    "results": [
+      {
+        "display_name": "Vet Care Pet Clinic, Dr. Ketkar Path, Erandwane, Pune City, Pune, Maharashtra, 411004, India",
+        "lat": 18.51784883793332,
+        "lon": 73.83456878298689
+      }
+    ]
   }
 }

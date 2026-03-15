@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -10,6 +10,7 @@ class TaskBase(BaseModel):
     latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     longitude: Optional[float] = Field(default=None, ge=-180, le=180)
     radius_meters: int = Field(default=150, ge=25, le=5000)
+    reminder_schedule: Literal["daily", "weekdays", "tomorrow"] = "daily"
 
     remind_on_arrival: bool = True
     due_at: Optional[datetime] = None
@@ -25,6 +26,7 @@ class TaskUpdate(BaseModel):
     latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     longitude: Optional[float] = Field(default=None, ge=-180, le=180)
     radius_meters: Optional[int] = Field(default=None, ge=25, le=5000)
+    reminder_schedule: Optional[Literal["daily", "weekdays", "tomorrow"]] = None
     remind_on_arrival: Optional[bool] = None
     due_at: Optional[datetime] = None
     is_completed: Optional[bool] = None

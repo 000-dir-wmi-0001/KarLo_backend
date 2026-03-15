@@ -7,6 +7,7 @@ from app.db.session import get_db
 from app.utils.token.jwt import create_token, verify_token, create_refresh_token
 from app.core.config import settings
 from datetime import timedelta
+from sqlalchemy.exc import IntegrityError
 
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -36,7 +37,11 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
 
 @auth_router.post("/register", response_model=user_schema.CreateUserResponse, status_code=status.HTTP_201_CREATED)
 def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-    return user_service.create_user(user, db)
+    try:
+        return user_service.create_user(user, db)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
 
 
 @auth_router.post("/login", response_model=user_schema.UserLoginResponse)

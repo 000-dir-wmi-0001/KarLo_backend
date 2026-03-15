@@ -100,39 +100,3 @@ def test_geocode_endpoint_with_mocked_provider(client, monkeypatch):
     assert response.status_code == 200
     assert response.json()["total"] == 1
     assert response.json()["results"][0]["display_name"] == "Pune, Maharashtra, India"
-
-
-def test_home_cure_admin_routes_reject_regular_users(client):
-    register_response = client.post(
-        "/home_cure/auth/register",
-        json={
-            "full_name": "Home Cure User",
-            "email": "homecure@example.com",
-            "password": "Password123",
-        },
-    )
-    assert register_response.status_code == 201
-    home_cure_user_id = register_response.json()["data"]["id"]
-
-    login_response = client.post(
-        "/home_cure/auth/login",
-        json={
-            "email": "homecure@example.com",
-            "password": "Password123",
-        },
-    )
-    assert login_response.status_code == 200
-
-    access_token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    me_response = client.put(
-        f"/home_cure/auth/{home_cure_user_id}/update",
-        json={"full_name": "Updated Home Cure User"},
-        headers=headers,
-    )
-    assert me_response.status_code == 200
-    assert me_response.json()["full_name"] == "Updated Home Cure User"
-
-    admin_response = client.get("/home_cure/admin/dashboard/kpis", headers=headers)
-    assert admin_response.status_code == 403

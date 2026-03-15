@@ -3,6 +3,11 @@ import os
 
 load_dotenv()
 
+
+def _optional_env(name: str) -> str | None:
+    value = os.getenv(name)
+    return value if value else None
+
 class Settings:
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL")
@@ -17,7 +22,7 @@ class Settings:
     REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", 7))
     COOKIE_SECURE: bool = os.getenv("COOKIE_SECURE", "false").lower() == "true"
     COOKIE_SAMESITE: str = os.getenv("COOKIE_SAMESITE", "lax")
-    COOKIE_DOMAIN: str | None = os.getenv("COOKIE_DOMAIN")
+    COOKIE_DOMAIN: str | None = _optional_env("COOKIE_DOMAIN")
 
     # Password Hashing
     HASH_ALGORITHM: str = os.getenv("HASH_ALGORITHM", "bcrypt")
