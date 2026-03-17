@@ -85,8 +85,12 @@ def check_geofence_for_user(user_id: int, latitude: float, longitude: float, db:
         if distance > task.radius_meters:
             continue
 
-        if task.last_triggered_at and now - task.last_triggered_at < cooldown:
-            continue
+        last = task.last_triggered_at
+        if last:
+            if last.tzinfo is None:
+                last = last.replace(tzinfo=timezone.utc)
+            if now - last < cooldown:
+                continue
 
         task.last_triggered_at = now
         if _task_schedule(task) == "tomorrow":

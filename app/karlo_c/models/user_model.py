@@ -19,6 +19,8 @@ class KarloUser(Base):
     is_active = Column(Boolean, default=True)  # True for active
     is_superuser = Column(Boolean, default=False)  # True for superuser
     is_verified = Column(Boolean, default=True)  # True for verified (consider default=False depending on flow)
+    agreed_to_terms = Column(Boolean, default=False)
+    newsletter_opt_in = Column(Boolean, default=False)
     profile_picture = Column(String, nullable=True)
     bio = Column(String, nullable=True)
     country = Column(String, index=True, nullable=True)

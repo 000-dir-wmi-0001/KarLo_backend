@@ -12,7 +12,10 @@ from sqlalchemy.exc import IntegrityError
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-def _set_auth_cookies(response: Response, access_token: str, refresh_token: str):
+def _set_auth_cookies(response: Response, access_token: str, refresh_token: str, remember_me: bool = False):
+    access_max_age = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    refresh_max_age = settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60 if remember_me else None
+    
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -20,19 +23,31 @@ def _set_auth_cookies(response: Response, access_token: str, refresh_token: str)
         secure=settings.COOKIE_SECURE,
         samesite=settings.COOKIE_SAMESITE,
         domain=settings.COOKIE_DOMAIN,
-        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        max_age=access_max_age,
         path="/",
     )
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=settings.COOKIE_SECURE,
-        samesite=settings.COOKIE_SAMESITE,
-        domain=settings.COOKIE_DOMAIN,
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        path="/",
-    )
+    if refresh_max_age is not None:
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=settings.COOKIE_SAMESITE,
+            domain=settings.COOKIE_DOMAIN,
+            max_age=refresh_max_age,
+            path="/",
+        )
+    else:
+        # Session cookie
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=settings.COOKIE_SAMESITE,
+            domain=settings.COOKIE_DOMAIN,
+            path="/",
+        )
 
 
 @auth_router.post("/register", response_model=user_schema.CreateUserResponse, status_code=status.HTTP_201_CREATED)
@@ -51,24 +66,24 @@ def login(user: user_schema.UserLogin, response: Response, db: Session = Depends
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # generate tokens directly
+    token_data = {"sub": str(user_obj.id), "is_superuser": user_obj.is_superuser}
+
     access_token = create_token(
-        data={"sub": str(user_obj.id)},
+        data=token_data,
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
         token_type="access"
     )
     refresh_token = create_token(
-        data={"sub": str(user_obj.id)},
+        data=token_data,
         expires_delta=timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
         token_type="refresh"
     )
 
-    _set_auth_cookies(response, access_token, refresh_token)
+    _set_auth_cookies(response, access_token, refresh_token, remember_me=user.remember_me)
 
     return user_schema.UserLoginResponse(
-        access_token=access_token,
-        refresh_token=refresh_token,
-        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # in seconds
-        user=user_obj
+        user=user_obj,
+        message="Login successful"
     )
 
 
@@ -80,11 +95,15 @@ def update_password(
     db: Session = Depends(get_db),
     request: Request = None,
 ):
-    # Require that the token subject matches the user_id
     token_payload = getattr(request.state, "user", None) if request else None
     token_sub = token_payload.get("sub") if isinstance(token_payload, dict) else None
     if token_sub is None or str(user_id) != str(token_sub):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
+
+    # Verify current password
+    user_obj = auth_service.authenticate_user_by_id(user_id, password_update.current_password, db)
+    if not user_obj:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Current password is incorrect")
 
     result = auth_service.update_password(user_id, password_update.new_password, db)
     if not result:
@@ -117,19 +136,17 @@ def refresh_token(request: Request, response: Response, db: Session = Depends(ge
 
     # Issue new access token (and rotate refresh token)
     access_token = create_token(
-        data={"sub": str(user_obj.id)},
+        data={"sub": str(user_obj.id), "is_superuser": user_obj.is_superuser},
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
         token_type="access"
     )
-    new_refresh_token = create_refresh_token({"sub": str(user_obj.id)})
+    new_refresh_token = create_refresh_token({"sub": str(user_obj.id), "is_superuser": user_obj.is_superuser})
 
     _set_auth_cookies(response, access_token, new_refresh_token)
 
     return user_schema.UserLoginResponse(
-        access_token=access_token,
-        refresh_token=new_refresh_token,
-        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         user=user_obj,
+        message="Token refreshed successfully"
     )
 
 
