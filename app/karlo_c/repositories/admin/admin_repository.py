@@ -349,7 +349,9 @@ def get_security_logs(
 # Privacy: ROUND(lat,2)/ROUND(lng,2) bucketing + k-anonymity ≥ 5
 # ──────────────────────────────────────────
 
-K_ANONYMITY_THRESHOLD = 5
+import os
+
+K_ANONYMITY_THRESHOLD = int(os.getenv("HEATMAP_K_ANONYMITY", "2"))
 
 
 def get_task_heatmap(db: Session, days: int = 30) -> dict:
