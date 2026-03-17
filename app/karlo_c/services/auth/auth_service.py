@@ -12,6 +12,13 @@ def authenticate_user(email: str, password: str, db: Session):
     return user
 
 
+def authenticate_user_by_id(user_id: int, password: str, db: Session):
+    user = user_repository.get_user_by_id(db, user_id)
+    if not user or not verify_password(password, user.hashed_password):
+        return None
+    return user
+
+
 def update_password(user_id: int, new_password: str, db: Session):
     user = user_repository.get_user_by_id(db, user_id)
     if not user:

@@ -27,6 +27,7 @@ def create_task(task: task_schema.TaskCreate, request: Request, db: Session = De
 
 
 @task_router.get("/", response_model=task_schema.TaskListResponse)
+@task_router.get("", response_model=task_schema.TaskListResponse, include_in_schema=False)
 def list_my_tasks(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     user_id = _get_auth_user_id(request)
     tasks = task_service.get_tasks_for_user(user_id, db, skip, limit)

@@ -19,6 +19,7 @@ class Task(Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     radius_meters = Column(Integer, nullable=False, default=150)
+    reminder_schedule = Column(String(20), nullable=False, default="daily")
 
     remind_on_arrival = Column(Boolean, nullable=False, default=True)
     is_completed = Column(Boolean, nullable=False, default=False)

@@ -71,7 +71,7 @@ alembic upgrade head
 .venv\Scripts\python.exe -m pytest
 ```
 
-Backend API tests cover authentication, task geofence checks, authorization boundaries, and Home Cure admin protection.
+Backend API tests cover authentication, task geofence checks, and authorization boundaries.
 
 ## Docker
 ```cmd
@@ -80,5 +80,4 @@ docker run --rm -p 8000:8000 --env-file .env karlo-backend
 ```
 
 ## Notes
-- Home Cure module is mounted at `/home_cure` and has separate routes.
 - For local development, SQLite fallback works when `DATABASE_URL` is missing.

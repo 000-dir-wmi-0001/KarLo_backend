@@ -8,8 +8,8 @@ from app.core.config import settings
 from app.middleware.jwt_middleware import JWTMiddleware
 from fastapi.routing import APIRoute
 from contextlib import asynccontextmanager
-from app.home_cure import home_cure_app
-from app.home_cure.core.config import HOME_CURE_PUBLIC_PATHS
+from app.db.session import is_sqlite
+from sqlalchemy import inspect, text
 
 public_paths = [
     # Public API endpoints (include full routed path with /api prefix)
@@ -24,7 +24,7 @@ public_paths = [
     "/docs",
     "/redoc",
     "/openapi.json",
-] + HOME_CURE_PUBLIC_PATHS  # Add home_cure public paths
+]
 
 
 # Create tables only in dev or when using SQLite (avoid on remote DBs)
@@ -38,6 +38,22 @@ public_paths = [
 # Lifespan handler replaces deprecated on_event hooks
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Ensure local SQLite fallback has required tables when migrations are not applied yet.
+    if is_sqlite:
+        try:
+            Base.metadata.create_all(bind=engine)
+
+            inspector = inspect(engine)
+            if inspector.has_table("task"):
+                columns = {col["name"] for col in inspector.get_columns("task")}
+                if "reminder_schedule" not in columns:
+                    with engine.begin() as conn:
+                        conn.execute(
+                            text("ALTER TABLE task ADD COLUMN reminder_schedule VARCHAR(20) NOT NULL DEFAULT 'daily'")
+                        )
+        except Exception as e:
+            print("[DB-INIT] error:", e)
+
     # Startup: log route response_class to catch misconfigurations breaking OpenAPI
     try:
         for route in app.routes:
@@ -55,6 +71,7 @@ app = FastAPI(
     description="FastAPI backend for KarLo data.",
     version="1.0.0",
     lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 
@@ -67,26 +84,22 @@ app.add_middleware(
         "https://kar-lo.vercel.app",
         "https://www.momin-mohasin.me",
         "http://localhost:3001",
-        "https://home-cure-frontend.vercel.app",
     ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
 )
 app.add_middleware(
     JWTMiddleware,
-    # Protect all versioned API routes (v1, v2, ...) under the /api prefix and /home_cure
+    # Protect all versioned API routes (v1, v2, ...) under the /api prefix
     protected_prefix="/api/v",
-    protected_prefixes=["/api/v", "/home_cure"],
+    protected_prefixes=["/api/v"],
     public_paths=public_paths
 )
 
 
 # Register API routes
 app.include_router(api_router)
-
-# Mount the Home Cure app as a sub-application
-app.mount("/home_cure", home_cure_app)
 
 # Root route
 @app.get("/")

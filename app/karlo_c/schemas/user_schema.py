@@ -17,6 +17,8 @@ class UserBase(BaseModel):
     address: Optional[str] = None
     role: Optional[str] = "user"
     geo_location: Optional[str] = None
+    agreed_to_terms: Optional[bool] = False
+    newsletter_opt_in: Optional[bool] = False
 
 
 # ---------- Create ----------
@@ -24,6 +26,8 @@ class UserCreate(UserBase):
     full_name: str
     email: EmailStr
     password: str   # plain password for request
+    agreed_to_terms: bool
+    newsletter_opt_in: bool
 
 
 # ---------- Update ----------
@@ -71,10 +75,7 @@ class CreateUserResponse(BaseModel):
 
 # ---------- Login Response ----------
 class UserLoginResponse(BaseModel):
-    access_token: str
-    refresh_token: Optional[str] = None  # include if you issue refresh tokens
-    token_type: str = "bearer"
-    expires_in: int                      # seconds until access token expires
+    message: str = "Login successful"
     user: UserResponse
 
 
@@ -82,8 +83,10 @@ class UserLoginResponse(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+    remember_me: bool = False
 
 
 # ---------- Password Update Request ----------
 class PasswordUpdate(BaseModel):
+    current_password: str
     new_password: str

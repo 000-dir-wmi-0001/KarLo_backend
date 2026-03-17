@@ -18,8 +18,8 @@ class JWTMiddleware(BaseHTTPMiddleware):
         path = request.url.path
         rotate_tokens: tuple[str, str] | None = None
 
-        # Skip public paths
-        if path in self.public_paths:
+        # Skip public paths (strip trailing slash for comparison so both /path and /path/ match)
+        if path.rstrip("/") in [p.rstrip("/") for p in self.public_paths]:
             return await call_next(request)
 
         # Allow CORS preflight requests to pass through without auth checks
