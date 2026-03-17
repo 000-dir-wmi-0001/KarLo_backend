@@ -79,11 +79,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         settings.ORIGIN_URL,
-        "http://localhost:3000",
-        "https://momin-mohasin.vercel.app",
-        "https://kar-lo.vercel.app",
-        "https://www.momin-mohasin.me",
-        "http://localhost:3001",
+        "karlo-gules.vercel.app",
+        "https://karlo.momin-mohasin.me",
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
