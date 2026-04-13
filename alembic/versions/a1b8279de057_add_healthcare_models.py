@@ -19,11 +19,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """Upgrade schema - Add healthcare models."""
-    
-    # Create Technician table
-    op.create_table(
-        'home_cure_technician',
+    pass  # stale migration from old project, no-op
+
+def downgrade() -> None:
+    pass
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('specialization', sa.String(length=255), nullable=False),

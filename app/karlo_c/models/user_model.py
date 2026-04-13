@@ -28,6 +28,12 @@ class KarloUser(Base):
     city = Column(String, index=True, nullable=True)
     zip_code = Column(String, index=True, nullable=True)
     address = Column(String, index=True, nullable=True)
+
+    #security-related fields
+    mfa_enabled = Column(Boolean, default=False)
+    mfa_secret = Column(String, nullable=True)
+    mfa_backup_codes = Column(String, nullable=True)  # Store as JSON string or comma-separated
+    mfa_enabled_at = Column(DateTime(timezone=True), nullable=True)
     # Use timezone-aware DateTime columns
     last_login = Column(DateTime(timezone=True), nullable=True)
     role = Column(String, index=True, nullable=True, default="user")  # e.g., admin, user, moderator

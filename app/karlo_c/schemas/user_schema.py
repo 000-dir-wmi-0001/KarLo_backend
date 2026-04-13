@@ -90,3 +90,24 @@ class UserLogin(BaseModel):
 class PasswordUpdate(BaseModel):
     current_password: str
     new_password: str
+
+
+# ---------- MFA Schemas ----------
+class MFASetupResponse(BaseModel):
+    secret: str
+    uri: str
+    qr_svg: str
+
+class MFAEnableRequest(BaseModel):
+    secret: str
+    code: str
+
+class MFAEnableResponse(BaseModel):
+    backup_codes: list[str]
+
+class MFAVerifyRequest(BaseModel):
+    code: str
+
+class MFAStatusResponse(BaseModel):
+    mfa_enabled: bool
+    mfa_enabled_at: Optional[datetime] = None

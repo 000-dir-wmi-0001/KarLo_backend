@@ -19,9 +19,13 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # Add 'name' column to 'contact' table if not exists
-    op.add_column('contact', sa.Column('name', sa.String(), nullable=True))
-    op.create_index(op.f('ix_contact_name'), 'contact', ['name'], unique=False)
+    conn = op.get_bind()
+    cols = [row[1] for row in conn.execute(sa.text("PRAGMA table_info(contact)"))]
+    if 'name' not in cols:
+        op.add_column('contact', sa.Column('name', sa.String(), nullable=True))
+    indexes = [row[1] for row in conn.execute(sa.text("PRAGMA index_list(contact)"))]
+    if 'ix_contact_name' not in indexes:
+        op.create_index(op.f('ix_contact_name'), 'contact', ['name'], unique=False)
 
 
 def downgrade() -> None:
