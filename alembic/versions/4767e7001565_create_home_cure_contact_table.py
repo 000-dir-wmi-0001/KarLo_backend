@@ -16,14 +16,7 @@ depends_on: str = None
 
 # --- Migration functions ---
 def upgrade():
-    op.create_table(
-        'home_cure_contact',
-        sa.Column('id', sa.Integer(), primary_key=True, index=True),
-        sa.Column('name', sa.String(), index=True, nullable=False),
-        sa.Column('email', sa.String(), index=True, nullable=False),
-        sa.Column('phone', sa.String(length=10), index=True, nullable=True),
-        sa.Column('message', sa.String(), nullable=True),
-    )
+    pass  # stale migration from old project, no-op
 
 def downgrade():
-    op.drop_table('home_cure_contact')
+    pass
