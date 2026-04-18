@@ -73,6 +73,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
     redirect_slashes=False,
+
 )
 
 

@@ -31,6 +31,9 @@ class Settings:
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
     ORIGIN_URL: str = os.getenv("ORIGIN_URL")
 
+    # RAG App
+    RAG_APP_ENDPOINT: str = os.getenv("RAG_APP_ENDPOINT", "http://localhost:8000")
+
     # Environment
     ENV: str = os.getenv("ENV", "development")
 
